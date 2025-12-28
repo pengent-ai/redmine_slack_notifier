@@ -1,0 +1,20 @@
+<h3>Slack Notifier</h3>
+
+<%= form_with url: "/projects/#{@project.identifier}/slack_notifier", method: :post, local: true do %>
+  <p>
+    <label>Slack Webhook URL</label><br>
+    <%= text_field_tag "slack_notifier[webhook_url]", @setting.webhook_url, size: 90 %>
+  </p>
+
+  <% if @setting.errors.any? %>
+    <div class="flash error">
+      <ul>
+        <% @setting.errors.full_messages.each do |m| %>
+          <li><%= m %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <%= submit_tag l(:button_save) %>
+<% end %>
