@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_dependency "issue"
+require_dependency File.expand_path("markdown_converter", __dir__)
 
 module RedmineSlackNotifier
   class Hooks < Redmine::Hook::Listener
@@ -60,7 +61,7 @@ module RedmineSlackNotifier
         unless desc.empty?
           blocks << {
             type: "section",
-            text: { type: "mrkdwn", text: "*説明:*\n#{escape_slack(truncate(desc, 1200))}" }
+            text: { type: "mrkdwn", text: "*説明:*\n#{to_slack_mrkdwn(truncate(desc, 1200))}" }
           }
           blocks << { type: "divider" }
         end
@@ -69,7 +70,7 @@ module RedmineSlackNotifier
         unless comment.empty?
           blocks << {
             type: "section",
-            text: { type: "mrkdwn", text: "*コメント:*\n#{escape_slack(truncate(comment, 1200))}" }
+            text: { type: "mrkdwn", text: "*コメント:*\n#{to_slack_mrkdwn(truncate(comment, 1200))}" }
           }
           blocks << { type: "divider" }
         end
@@ -88,6 +89,10 @@ module RedmineSlackNotifier
 
     def escape_slack(text)
       text.to_s.gsub("&", "&amp;").gsub("<", "&lt;").gsub(">", "&gt;")
+    end
+
+    def to_slack_mrkdwn(text)
+      RedmineSlackNotifier::MarkdownConverter.to_slack_mrkdwn(text)
     end
 
     def truncate(text, max_len)
