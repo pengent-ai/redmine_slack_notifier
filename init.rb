@@ -6,7 +6,7 @@ Redmine::Plugin.register :redmine_slack_notifier do
   name "Redmine Slack Notifier plugin"
   author "Ry.yamafuji"
   description "Send Redmine issue events to Slack"
-  version "0.1.0"
+  version "0.1.1"
 
   project_module :redmine_slack_notifier do
     permission :manage_slack_notifier,
